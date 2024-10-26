@@ -164,3 +164,7 @@ cython_debug/
 
 # VSCode stuff
 .vscode
+
+
+# Sandbox stuff
+sandbox/
