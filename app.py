@@ -56,16 +56,6 @@ def fetch_fortune(question):
 async def on_ready():
     print(f'We have logged in as {client.user}')
 
-
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
-
-
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -74,6 +64,10 @@ async def on_message(message):
     if message.content.startswith('$conch'):
         fortune = fetch_fortune("Some question")
         await message.channel.send(fortune)
+
+    if message.content.startswith('$test'):
+        print(client)
+        await message.channel.send(f"Printing client data.")
 
 
 client.run(DISCORD_BOT_API_KEY)
