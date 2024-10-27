@@ -92,7 +92,8 @@ async def on_message(message):
             advice = get_advice(query)
             await message.channel.send(advice)  
         except Exception as e:
-            await message.channel.send(e)
+            print(f"[ERROR] There was an error getting some advice:\n{e}")
+            await message.channel.send(f"[ERROR] {e}")
         
 
 
