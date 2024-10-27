@@ -1,8 +1,9 @@
-# This example requires the 'message_content' intent.
-
+# Import all the things
 import discord
 import os
 import random
+import requests
+import json
 
 DISCORD_BOT_API_KEY = os.getenv("DISCORD_BOT_API_KEY")
 
@@ -51,6 +52,22 @@ def fetch_fortune(question):
     fortune = "🐚 " "'" + options[random_number] + "'" 
     return fortune
 
+def get_advice(query):
+    """Fetcehes some random advice based on a single word query."""
+    if len(query.split()) > 1:
+        raise Exception("Too many words in query! Only a single word can be provided.")
+    else:
+        # Call the advice API
+        api_url = f"https://api.adviceslip.com/advice/search/{query}"
+        payload = {}
+        headers = {}
+        api_response = requests.request("GET", api_url, headers=headers, data=payload)
+
+        # Select a random advice returned
+        response_json = json.loads(api_response.text)
+        rand_int = random.randint(0,int(response_json['total_results'])-1)  
+        selected_advice = response_json["slips"][rand_int]["advice"]
+        return selected_advice
 
 @client.event
 async def on_ready():
@@ -68,6 +85,15 @@ async def on_message(message):
     if message.content.startswith('$test'):
         print(client)
         await message.channel.send(f"Printing client data.")
+
+    if message.content.startswith('$advice'):
+        try:
+            query = message.content.strip("$advice ")
+            advice = get_advice(query)
+            await message.channel.send(advice)  
+        except Exception as e:
+            await message.channel.send(e)
+        
 
 
 client.run(DISCORD_BOT_API_KEY)
