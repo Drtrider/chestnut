@@ -1,2 +1,2 @@
 # chestnut
-Chestnet is a fun discord bot.
+Chetnut is a helpful little dude.
