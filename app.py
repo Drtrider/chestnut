@@ -12,7 +12,7 @@ intents.message_content = True
 client = discord.Client(intents=intents)
 
 
-def fetch_fortune(question):
+def ask_conch(question):
     """Will return a string given in a question."""
 
     options = [
@@ -49,7 +49,7 @@ def fetch_fortune(question):
 
     options_length = len(options)
     random_number = random.randint(1, options_length)
-    fortune = "🐚 " "'" + options[random_number] + "'" 
+    fortune = "🐚  " "'*" + options[random_number] + "*'" 
     return fortune
 
 def get_advice(query):
@@ -84,7 +84,7 @@ async def on_message(message):
         return
 
     if message.content.startswith('$conch'):
-        fortune = fetch_fortune("Some question")
+        fortune = ask_conch("Some question")
         await message.channel.send(fortune)
 
     if message.content.startswith('$test'):
