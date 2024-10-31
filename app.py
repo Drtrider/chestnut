@@ -63,11 +63,16 @@ def get_advice(query):
         headers = {}
         api_response = requests.request("GET", api_url, headers=headers, data=payload)
 
-        # Select a random advice returned
+        #Check if some advice was found, if it's not. Raise exception
         response_json = json.loads(api_response.text)
-        rand_int = random.randint(0,int(response_json['total_results'])-1)  
-        selected_advice = response_json["slips"][rand_int]["advice"]
-        return selected_advice
+        count_of_results = int(response_json.get(("total_results"),0))
+        if count_of_results == 0:
+            raise Exception(f"Sorry, I have no advice for '{query}.'")
+        else:
+            # Select a random advice returned
+            rand_int = random.randint(0,int(response_json['total_results'])-1)  
+            selected_advice = response_json["slips"][rand_int]["advice"]
+            return selected_advice
 
 @client.event
 async def on_ready():
@@ -93,7 +98,7 @@ async def on_message(message):
             await message.channel.send(advice)  
         except Exception as e:
             print(f"[ERROR] There was an error getting some advice:\n{e}")
-            await message.channel.send(f"[ERROR] {e}")
+            await message.channel.send(f"{e}")
         
 
 
