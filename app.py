@@ -118,7 +118,7 @@ async def on_message(message):
 
     if message.content.startswith('$advice'):
         try:
-            query = message.content.strip("$advice ")
+            query = message.content[len("$advice "):] if message.content.startswith("$advice ") else message.content
             advice = get_advice(query)
             await message.channel.send(advice)
         except Exception as e:
